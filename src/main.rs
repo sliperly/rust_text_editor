@@ -1,3 +1,5 @@
+mod editor;
+
 use std::io::{self, Read, Write};
 use std::io::{Stdin, Bytes};
 use termion::raw::RawTerminal;
