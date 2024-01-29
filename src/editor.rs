@@ -1,13 +1,15 @@
 use std::{
-    fmt,
+    fmt::{},
     io::{self, Stdout, Write},
 };
 use termion::{
     color,
     event::Key,
     input::TermRead,
-    raw::{RawTerminal, IntroRawMode};
+    raw::{RawTerminal, IntroRawMode}
 };
+
+use crate::document::Document;
 
 const EXIT_CHARACTER: char = 'q';
 const PADDING_BUTTOM: u16 = 2;
@@ -34,16 +36,19 @@ impl fmt::Display for Position {
 pub struct Editor {
     exit: bool,
     stdout: RawTerminal<Stdout>,
+    document: Document,
+    screen_size: ScreenSize,
     coursor_position: Position,
 }
 
 impl Editor {
-    pub fn new() -> Result<Self, io::Error> {
-        let (width: u16, height: u16) = termion::terminal_size()?;
+    pub fn new(document: Document) -> Result<Self, io::Error> {
+        let (width, height) = termion::terminal_size()?;
 
         Ok(Editor {
             exit: false,
-            stdout: io::stdout().intro_raw_mode()?,
+            stdout: io::stdout().into_raw_mode()?,
+            document,
             screen_size: ScreenSize { width, height: height.saturating_sub(PADDING_BUTTOM) },
             cursor_position: Position::default(),
         })
@@ -73,15 +78,10 @@ impl Editor {
     }
 
     fn render_rows(&self) {
-        for row_num: u16 in 0..self.screen_size.height {
+        for row_num: in 0..self.screen_size.height {
             print!("{}", termion::clear::CurrentLine);
-            if row_num == self.screen_size.height / 2 {
-                let message: &str = "Hello from rust-text-editor";
-                let padding: String = " ".repeat(
-                    (self.screen_size.width / 2 + 1) as usize - message.len() / 2
-                );
-
-                println!("~{}{}\r", paddiing, message);
+            if let Some(row) = self.document.rows.get(row_now as usize) {
+                println!("{}\r", row)
             } else {
                 println!("~\r");
             }
