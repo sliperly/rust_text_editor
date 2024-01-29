@@ -98,8 +98,7 @@ impl Editor {
     }
 
     fn render_status_bar(&self) {
-        for row_num: u16 in 0..self.screen_size.height {
-            print!("{}", termion::clear::CurrentLine);
+        print!("{}", termion::clear::CurrentLine);
 
         let status_message: String = format!("cursor {}", self.cursor_position);
         let end_spaces: String = " ".repeat(
