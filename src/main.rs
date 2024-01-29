@@ -5,7 +5,7 @@ use clap::{Command, Arg};
 
 const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const VERSION: &str = env!("CARGO_PKG_VERSION");
-const FILE_PATH_ARG: &str = "filepath"
+const FILE_PATH_ARG: &str = "filepath";
 
 use editor::Editor;
 
