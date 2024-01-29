@@ -69,15 +69,17 @@ impl Editor {
     }
 
     fn render(&mut self) -> Result<(), io::Error> {
+        print!("{}", termion::cursor::Hide);
         print!("{}", termion::cursor::Goto::default());
 
         self.render_rows();
         self.render_status_bar();
 
         print!("{}", termion::cursor::Goto(
-            self.cursor_position.x.saturating_add(1) as u16,
-            self.cursor_position.y.saturating_add(1) as u16,
+            self.cursor_position.x.saturating_sub(self.screen_offset.x).saturating_add(1) as u16,
+            self.cursor_position.y.saturating_sub(self.screen_offset.y).saturating_add(1) as u16,
         ));
+        print!("{}", termion::cursor::Show);
 
         self.stdout.flush()
     }
@@ -85,7 +87,9 @@ impl Editor {
     fn render_rows(&self) {
         for row_num: in 0..self.screen_size.height {
             print!("{}", termion::clear::CurrentLine);
-            if let Some(row) = self.document.rows.get(row_now as usize) {
+            if let Some(row) = self.document.rows.get(
+                self.screen_offset.y.saturating_add(row_num as usize)
+            ) {
                 println!("{}\r", row)
             } else {
                 println!("~\r");
@@ -163,7 +167,14 @@ impl Editor {
     }
 
     fn change_offsets(&mut self) {
-
+        let height = self.screen_size.height as usize;
+        if self.cursor_position.y < self.screen_offset.y {
+            self.screen_offset.y = self.cursor_position.y;
+        } else if self.cursor_position.y >= self.screen_offset.y.saturating_add(height) {
+            self.screen_offset.y = self.cursor_position.y
+                .saturating_sub(height)
+                .saturating_add(1)
+        }
     }
 
     fn next_key(&self) -> Result<Key, io::Error> {
