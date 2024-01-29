@@ -2,7 +2,7 @@ use std::{
     fs::File,
     path::Path,
     io::{preline::*, BufReader}
-},
+};
 
 pub struct Document {
     pub rows: Vec<String>,

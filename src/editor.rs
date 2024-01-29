@@ -85,7 +85,7 @@ impl Editor {
     }
 
     fn render_rows(&self) {
-        for row_num: in 0..self.screen_size.height {
+        for row_num in 0..self.screen_size.height {
             print!("{}", termion::clear::CurrentLine);
             if let Some(row) = self.document.rows.get(
                 self.screen_offset.y.saturating_add(row_num as usize)
