@@ -41,6 +41,7 @@ pub struct Editor {
     document: Document,
     screen_size: ScreenSize,
     coursor_position: Position,
+    screen_offset: Position,
 }
 
 impl Editor {
@@ -53,11 +54,13 @@ impl Editor {
             document,
             screen_size: ScreenSize { width, height: height.saturating_sub(PADDING_BUTTOM) },
             cursor_position: Position::default(),
+            screen_offset: Position::default(),
         })
     }
 
     pub fn run(&mut self) -> Result<(), io::Error> {
         while !self.exit {
+            self.change_offset();
             self.render()?;
             self.process_key()?;
         }
@@ -157,6 +160,10 @@ impl Editor {
             self.cursor_position.y = self.cursor_position.y.saturating_add(1);
             self.cursor_position.x = DEFAULT_X_POSITION;
         }
+    }
+
+    fn change_offsets(&mut self) {
+
     }
 
     fn next_key(&self) -> Result<Key, io::Error> {
