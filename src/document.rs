@@ -1,7 +1,7 @@
 use std::{
     fs::File,
     path::Path,
-    io::{preline::*, BufReader}
+    io::{prelude::*, BufReader}
 };
 
 pub struct Document {
