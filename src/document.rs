@@ -23,8 +23,8 @@ impl Document {
                     document_rows.push(String::new());
                 },
                 _=> return Err(e)
-            }
-        }
+            },
+        };
         Ok(Self {
             rows: document_rows,
         })
