@@ -7,9 +7,7 @@ const APP_NAME: &str = env!("CARGO_PKG_NAME");
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const FILE_PATH_ARG: &str = "filepath";
 
-use editor::Editor;
-
-fn  main() {
+fn main() {
     let matches = Command::new(APP_NAME)
         .version(VERSION)
         .arg(
@@ -23,4 +21,3 @@ fn  main() {
     let document = document::Document::new(file_path).unwrap();
     let mut editor = editor::Editor::new(document).unwrap();
     editor.run().unwrap();
-}
