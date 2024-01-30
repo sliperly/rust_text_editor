@@ -21,3 +21,4 @@ fn main() {
     let document = document::Document::new(file_path).unwrap();
     let mut editor = editor::Editor::new(document).unwrap();
     editor.run().unwrap();
+}
