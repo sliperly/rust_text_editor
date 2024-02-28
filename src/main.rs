@@ -1,5 +1,6 @@
 mod editor;
 mod document;
+mod terminal;
 
 use clap::{Command, Arg};
 
