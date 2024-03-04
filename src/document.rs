@@ -1,8 +1,6 @@
-use std::{
-    fs::File,
-    io::{prelude::*, BufReader, LineWriter},
-    path::Path,
-};
+use std::fs::File;
+use std::io::{self, prelude::*, BufReader, LineWriter};
+use std::path::Path;
 
 const NEW_LINE_CHARACTER: char = '\n';
 
@@ -13,7 +11,7 @@ pub struct Document {
 }
 
 impl Document {
-    pub fn new(file_path: &str) -> Result<Self, std::io::Error> {
+    pub fn new(file_path: &str) -> Result<Self, io::Error> {
         let mut document_rows = vec![];
         match File::open(Path::new(file_path)) {
             Ok(file) => {
@@ -25,11 +23,11 @@ impl Document {
                 } else {
                     document_rows.push(String::new());
                 }
-            }
+            },
             Err(e) => match e.kind() {
                 std::io::ErrorKind::NotFound => {
                     document_rows.push(String::new());
-                }
+                },
                 _ => return Err(e),
             },
         };
@@ -41,7 +39,7 @@ impl Document {
         })
     }
 
-    pub fn save(&mut self) -> Result<(), std::io::Error> {
+    pub fn save(&mut self) -> Result<(), io::Error> {
         let file = File::create(&self.file_path)?;
         let mut writer = LineWriter::new(file);
 
@@ -80,9 +78,8 @@ impl Document {
             let new_row = self.rows[row_num].split_off(index);
             self.rows.insert(row_num.saturating_add(1), new_row);
         } else {
-            self.rows[row_num].insert(index, c)
+            self.rows[row_num].insert(index, c);
         }
-
         self.is_modified = true;
     }
 
@@ -95,6 +92,6 @@ impl Document {
         let row = self.rows[row_num].clone();
         self.rows[row_num.saturating_sub(1)].push_str(&row);
         self.rows.remove(row_num);
-        self.is_modified = true
+        self.is_modified = true;
     }
 }
